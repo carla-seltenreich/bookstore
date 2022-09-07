@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "pg": "^8.8.0",
+    "sequelize": "^6.21.4"
+  },
+  "name": "biblioteca",
+  "version": "1.0.0",
+  "description": "cadastros biblioteca",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "serve": "nodemon index.js -e js"
+  },
+  "author": "Carla",
+  "license": "ISC"
+}
