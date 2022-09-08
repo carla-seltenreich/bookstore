@@ -1,12 +1,46 @@
+p.a {
+  font-family: "Times New Roman", Times, serif;
+}
+
 .bg-mynav {
-    background-color: #49efa7;
-  }
-  
-  body {
-    font-size: 1.25rem;
-    background-color: #f6f8fa;
-  }
-  
-  td {
-    line-height: 3rem;
-  }
+  background-color: rgb(232, 232, 106);
+}
+
+body {
+  font-size: 1.25rem;
+  background-color: white;
+}
+
+td {
+  line-height: 3rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+.menu {
+  list-style: none;
+  border: 1px solid rgb(232, 232, 106);
+  float: center;
+  background-color: rgb(232, 232, 106);
+}
+
+.menu li {
+  position: relative;
+  float: left;
+}
+
+.menu li a {
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+  display: block;
+}
+
+.menu li a:hover {
+  background: ;
+  color: #fff;
+}

@@ -6,10 +6,23 @@ class StatesController {
   index = async (req, res, next) => {
 
     const state = await StateModel.findAll({
+      // include: [{
+      //   model: CityModel,
+      //   required: false,
+      //   attributes: ['name']
+      // }]
+    });
+
+    res.json(state);
+  }
+
+  cities = async (req, res, next) => {
+
+    const state = await StateModel.findByPk(req.params.stateId, {
       include: [{
         model: CityModel,
         required: false,
-        attributes: ['name']
+        attributes: ['id', 'name']
       }]
     });
 
