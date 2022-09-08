@@ -22,8 +22,6 @@ Category.init({
 });
 
 Category.hasMany(Book);
-Book.belongsTo(Category, {
-  foreignKey: "Categories_id"  
-})
+Book.belongsTo(Category);
 
 module.exports = Category;

@@ -1,5 +1,8 @@
 const { Op } = require('sequelize');
 const BookModel = require('../models/Book');
+const PublisherModel = require('../models/Publisher');
+const CategoryModel = require('../models/Category');
+
 
 class BooksController {
 
@@ -38,7 +41,19 @@ class BooksController {
             where: where,
             limit: limit,
             offset: offset,
-            order: [[sort, order]]
+            order: [[sort, order]],
+            include: [
+                {
+                    model: CategoryModel,
+                    require: false,
+                    attributes: ['description']
+                },
+                {
+                    model: PublisherModel,
+                    require: false,
+                    attributes: ['name']
+                }
+            ]
         });
         res.json(books);
     }
@@ -54,7 +69,18 @@ class BooksController {
     }
 
     show = async (req, res, next) => {
-        const book = await BookModel.findByPk(req.params.bookId);
+        const book = await BookModel.findByPk(req.params.bookId, {
+            include: [{
+                model: CategoryModel,
+                require: false,
+                attributes: ['description']
+            }],
+            include: [{
+                model: PublisherModel,
+                require: false,
+                attributes: ['name']
+            }]
+        })
         res.json(book);
     }
 
@@ -82,8 +108,8 @@ class BooksController {
         res.json({});
     }
 
-    _validateData = async (data, id) => {
-        const attributes = ['title', 'author', 'publication_year', 'pages'];
+    _validateData = async (data) => {
+        const attributes = ['title', 'author', 'publication_year', 'pages', 'CategoryId', 'PublisherId'];
         const book = {};
         for (const attribute of attributes) {
             if (!data[attribute]) {
@@ -91,9 +117,28 @@ class BooksController {
             }
             book[attribute] = data[attribute];
         }
+        // if (await this._checkIIdExists(book.id)) {
+        //     throw new Error(`The book with id "${book.id}" already exists.`);
+        // }
 
         return book;
     }
+
+    // _checkIfIdExists = async (title, ) => {
+    //     const where = {
+    //         title : title
+    //     };
+
+    //     // if (id) {
+    //     //     where.id = { [Op.ne]: id }; // WHERE id != id
+    //     // }
+
+    //     const count = await BookModel.count({
+    //         where: where
+    //     });
+
+    //     return count > 0;
+    
 
 }
 

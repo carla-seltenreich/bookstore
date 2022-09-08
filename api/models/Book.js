@@ -35,6 +35,6 @@ Book.init({
 });
 
 Publisher.hasMany(Book);
-Book.belongsTo(Publisher, { foreignKey: "publishers_id" })
+Book.belongsTo(Publisher);
 
 module.exports = Book;

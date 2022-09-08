@@ -113,22 +113,6 @@ const showPublisherCreateBox = () => {
     });
 }
 
-// const showPublisherEditBox = async (id) => {
-//     const publisher = await getPublisher(id);
-//     const data = publisher.data;
-//     Swal.fire({
-//         title: 'Edit publisher',
-//         html:
-//             '<input id="id" type="hidden" value=' + data.id + '>' +
-//             '<input id="name" class="swal2-input" placeholder="Name" value="' + data.name + '">',
-//         focusConfirm: false,
-//         showCancelButton: true,
-//         preConfirm: () => {
-//             publisherEdit();
-//         }
-//     });
-// }
-
 const showPublisherEditBox = async (id) => {
     const publisher = await getPublisher(id);
     const data = publisher.data;
