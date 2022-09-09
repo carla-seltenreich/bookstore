@@ -26,6 +26,18 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  if (req.path == '/web/login') {
+    return next()
+  }
+
+  if (req.session.auth && req.session.auth.isLoggedIn) {
+    return next();
+  }
+
+  res.redirect('/web/login');
+});
+
 app.use(routesApi);
 app.use(routesWeb);
 

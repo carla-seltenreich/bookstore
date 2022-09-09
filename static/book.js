@@ -1,7 +1,5 @@
-const ENDPOINT = "http://localhost:3000";
-
 const loadTable = () => {
-    axios.get(`${ENDPOINT}/books`)
+    axios.get(`${window._APP.endpoint}/books`)
         .then((response) => {
             if (response.status === 200) {
                 const data = response.data;
@@ -34,7 +32,7 @@ const bookCreate = () => {
     const category = document.getElementById("category").value;
     const publisher = document.getElementById("publisher").value;
 
-    axios.post(`${ENDPOINT}/books`, {
+    axios.post(`${window._APP.endpoint}/books`, {
         title: title,
         author: author,
         publication_year: publication_year,
@@ -54,7 +52,7 @@ const bookCreate = () => {
 }
 
 const getBook = (id) => {
-    return axios.get(`${ENDPOINT}/books/` + id);
+    return axios.get(`${window._APP.endpoint}/books/` + id);
 }
 
 const bookEdit = () => {
@@ -66,7 +64,7 @@ const bookEdit = () => {
     const category = document.getElementById("category").value;
     const publisher = document.getElementById("publisher").value;
 
-    axios.put(`${ENDPOINT}/books/` + id, {
+    axios.put(`${window._APP.endpoint}/books/` + id, {
         title: title,
         author: author,
         publication_year: publication_year,
@@ -88,8 +86,8 @@ const bookEdit = () => {
 const bookDelete = async (id) => {
     const book = await getBook(id);
     const data = book.data;
-    axios.delete(`${ENDPOINT}/books/` + id)
-        .then((response) => {
+    axios.delete(`${window._APP.endpoint}/books/` + id)
+        .then(() => {
             Swal.fire(`Book ${data.title} deleted`);
             loadTable();
         }, (error) => {
@@ -142,21 +140,8 @@ const showBookCreateBox = () => {
             const allCategories = await getAllCategories();
             const allPublishers = await getAllPublishers();
 
-            allCategories.forEach((item, index) => {
-                var opt = document.createElement('option');
-                opt.value = item.id;
-                opt.innerHTML = item.description;
-
-                category.appendChild(opt);
-            })
-
-            allPublishers.forEach((item, index) => {
-                var opt = document.createElement('option');
-                opt.value = item.id;
-                opt.innerHTML = item.name;
-
-                publisher.appendChild(opt);
-            })
+            renderSelectOptions(category, allCategories, 'description');
+            renderSelectOptions(publisher, allPublishers);
         }
     });
 }
@@ -202,13 +187,13 @@ const showBookEditBox = async (id) => {
 
 
 const getAllCategories = async () => {
-    const res = await axios.get(`${ENDPOINT}/categories`);
+    const res = await axios.get(`${window._APP.endpoint}/categories`);
 
     return res.data;
 }
 
 const getAllPublishers = async () => {
-    const res = await axios.get(`${ENDPOINT}/publishers`);
+    const res = await axios.get(`${window._APP.endpoint}/publishers`);
 
     return res.data;
 }

@@ -23,22 +23,26 @@ router.get('/web/login', function (req, res) {
     res.render('pages/login');
 });
 
-router.post('/login', (req, res) => {
+router.post('/web/login', (req, res) => {
     var email = 'carla@c';
     var password = 123;
 
     if (req.body.email == email && req.body.password == password) {
-        res.redirect('/web/home')
+        req.session.auth = {
+            email,
+            isLoggedIn: true,
+        }
+        res.redirect('/web/home');
     } else {
-        res.redirect('/web/login')
-        
+        res.redirect('/web/login');
     }
 })
-router.get('/login', (req, res) => {
-    if (req.session.email) {
-        res.redirect('web/home')
-    } else
-        res.redirect('web/login')
-});
+
+router.get('/web/logout', (req, res) => {
+    req.session.auth = null;
+
+    res.redirect('/web/login');
+})
+
 
 module.exports = router;

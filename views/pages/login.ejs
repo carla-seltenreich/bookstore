@@ -7,23 +7,20 @@
        
 
 <body>
-
-    <div id="table-form">
-        <form method="post" action="/login">
-            <h1><i class="fab fa-node"></i></h1><br>
-
-            <h1>Livraria CRIE_TI</h1>
-
-            <input class="email" type="email" name="email" placeholder="email" autocomplete="off"><br><br>
-
-            <input class="password" type="password" name="password" placeholder="password"><br><br>
-
-            <button class="btn" id="btn">Entrar</button><br>
-
-            <p>Ainda não tem uma conta?<a href="./registration.ejs"> <strong>Cadastre-se</strong></a></p><br>
-        </form>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mt-5">
+                <form action="/web/login" method="post">
+                    <div class="mb-2">
+                        <input type="text" name="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="mb-2">
+                        <input type="password" name="password" class="form-control" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <script src=""></script>
 </body>
-
 </html>

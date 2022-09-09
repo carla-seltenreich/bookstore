@@ -1,7 +1,5 @@
-const ENDPOINT = "http://localhost:3000";
-
 const loadTable = () => {
-    axios.get(`${ENDPOINT}/users`)
+    axios.get(`${window._APP.endpoint}/users`)
         .then((response) => {
             if (response.status === 200) {
                 const data = response.data;
@@ -30,7 +28,7 @@ const userCreate = () => {
     const sex = document.getElementById("sex").value;
     const email = document.getElementById("email").value;
 
-    axios.post(`${ENDPOINT}/users`, {
+    axios.post(`${window._APP.endpoint}/users`, {
         name: name,
         age: age,
         sex: sex,
@@ -48,7 +46,7 @@ const userCreate = () => {
 }
 
 const getUser = (id) => {
-    return axios.get(`${ENDPOINT}/users/` + id);
+    return axios.get(`${window._APP.endpoint}/users/` + id);
 }
 
 const userEdit = () => {
@@ -58,7 +56,7 @@ const userEdit = () => {
     const sex = document.getElementById("sex").value;
     const email = document.getElementById("email").value;
 
-    axios.put(`${ENDPOINT}/users/` + id, {
+    axios.put(`${window._APP.endpoint}/users/` + id, {
         name: name,
         age: age,
         sex: sex,
@@ -78,7 +76,7 @@ const userEdit = () => {
 const userDelete = async (id) => {
     const user = await getUser(id);
     const data = user.data;
-    axios.delete(`${ENDPOINT}/users/` + id)
+    axios.delete(`${window._APP.endpoint}/users/` + id)
         .then((response) => {
             Swal.fire(`User ${data.name} deleted`);
             loadTable();
@@ -108,7 +106,7 @@ const renderForm = (data) => {
 
 const showUserCreateBox = () => {
     Swal.fire({
-        title: 'Create user',
+        title: 'New user',
         html: renderForm(),
         focusConfirm: false,
         showCancelButton: true,

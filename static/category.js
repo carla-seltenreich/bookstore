@@ -1,7 +1,5 @@
-const ENDPOINT = "http://localhost:3000";
-
 const loadTable = () => {
-    axios.get(`${ENDPOINT}/categories`)
+    axios.get(`${window._APP.endpoint}/categories`)
         .then((response) => {
             if (response.status === 200) {
                 const data = response.data;
@@ -24,7 +22,7 @@ loadTable();
 const categoryCreate = () => {
     const description = document.getElementById("description").value;
 
-    axios.post(`${ENDPOINT}/categories`, {
+    axios.post(`${window._APP.endpoint}/categories`, {
         description: description,
     })
         .then((response) => {
@@ -39,14 +37,14 @@ const categoryCreate = () => {
 }
 
 const getCategory = (id) => {
-    return axios.get(`${ENDPOINT}/categories/` + id);
+    return axios.get(`${window._APP.endpoint}/categories/` + id);
 }
 
 const categoryEdit = () => {
     const id = document.getElementById("id").value;
     const description = document.getElementById("description").value;
 
-    axios.put(`${ENDPOINT}/categories/` + id, {
+    axios.put(`${window._APP.endpoint}/categories/` + id, {
         description: description,
     })
         .then((response) => {
@@ -63,7 +61,7 @@ const categoryEdit = () => {
 const categoryDelete = async (id) => {
     const category = await getCategory(id);
     const data = category.data;
-    axios.delete(`${ENDPOINT}/categories/` + id)
+    axios.delete(`${window._APP.endpoint}/categories/` + id)
         .then((response) => {
             loadTable();
             Swal.fire(`Category ${data.description} deleted`);

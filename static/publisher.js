@@ -1,7 +1,5 @@
-const ENDPOINT = "http://localhost:3000";
-
 const loadTable = () => {
-    axios.get(`${ENDPOINT}/publishers`)
+    axios.get(`${window._APP.endpoint}/publishers`)
         .then((response) => {
             if (response.status === 200) {
                 const data = response.data;
@@ -28,7 +26,7 @@ const publisherCreate = () => {
     const city = document.getElementById("city").value;
 
 
-    axios.post(`${ENDPOINT}/publishers`, {
+    axios.post(`${window._APP.endpoint}/publishers`, {
         name: name,
         CityId: city
     })
@@ -44,7 +42,7 @@ const publisherCreate = () => {
 }
 
 const getPublisher = (id) => {
-    return axios.get(`${ENDPOINT}/publishers/` + id);
+    return axios.get(`${window._APP.endpoint}/publishers/` + id);
 }
 
 const publisherEdit = () => {
@@ -52,7 +50,7 @@ const publisherEdit = () => {
     const name = document.getElementById("name").value;
     const city = document.getElementById("city").value;
 
-    axios.put(`${ENDPOINT}/publishers/` + id, {
+    axios.put(`${window._APP.endpoint}/publishers/` + id, {
         name: name,
         CityId: city
     })
@@ -70,7 +68,7 @@ const publisherEdit = () => {
 const publisherDelete = async (id) => {
     const publisher = await getPublisher(id);
     const data = publisher.data;
-    axios.delete(`${ENDPOINT}/publishers/` + id)
+    axios.delete(`${window._APP.endpoint}/publishers/` + id)
         .then((response) => {
             Swal.fire(`Publisher ${data.name} deleted`);
             loadTable();
@@ -110,13 +108,7 @@ const showPublisherCreateBox = () => {
             const state = document.getElementById('state');
             const allStates = await getAllStates();
 
-            allStates.forEach((item) => {
-                var opt = document.createElement('option');
-                opt.value = item.id;
-                opt.innerHTML = item.name;
-
-                state.appendChild(opt);
-            })
+            renderSelectOptions(state, allStates);
         }
     });
 }
@@ -137,13 +129,7 @@ const showPublisherEditBox = async (id) => {
             const state = document.getElementById('state');
             const allStates = await getAllStates();
 
-            allStates.forEach((item) => {
-                var opt = document.createElement('option');
-                opt.value = item.id;
-                opt.innerHTML = item.name;
-
-                state.appendChild(opt);
-            });
+            renderSelectOptions(state, allStates);
 
             state.value = data.City.State.id
             getCitiesByState(data.CityId);
@@ -152,7 +138,7 @@ const showPublisherEditBox = async (id) => {
 }
 
 const getAllStates = async () => {
-    const res = await axios.get(`${ENDPOINT}/states`);
+    const res = await axios.get(`${window._APP.endpoint}/states`);
 
     return res.data;
 }
@@ -160,20 +146,14 @@ const getAllStates = async () => {
 const getCitiesByState = async (defaultCity) => {
     const state = document.getElementById('state');
     const city = document.getElementById('city');
-    const res = await axios.get(`${ENDPOINT}/states/${state.value}/cities`);
+    const res = await axios.get(`${window._APP.endpoint}/states/${state.value}/cities`);
     const allCities = res.data.Cities;
 
     city.querySelectorAll('option').forEach(item => {
         item.remove()
     });
 
-    allCities.forEach((item) => {
-        var opt = document.createElement('option');
-        opt.value = item.id;
-        opt.innerHTML = item.name;
-
-        city.appendChild(opt);
-    });
+    renderSelectOptions(city, allCities);
 
     if (defaultCity) {
         city.value = defaultCity;
