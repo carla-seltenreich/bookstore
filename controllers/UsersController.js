@@ -77,7 +77,7 @@ class UsersController {
     try {
       const id = req.params.userId;
       const data = await this._validateData(req.body, id);
-      await UserModel.update(data, {
+      await UserModel.update({...data, password: crypt(data.password)}, {
         where: {
           id: id
         }

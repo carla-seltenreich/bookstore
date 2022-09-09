@@ -92,7 +92,7 @@ const userDelete = async (id) => {
 
 const renderForm = (data) => {
     return `
-        <input id="id" type="hidden">
+        <input id="id" type="hidden" value="${data ? data.id : ''}">
         <div class="mb-2">
             <input id="name" class="form-control" value="${data ? data.name : ''}" placeholder="Name">
         </div>
@@ -106,7 +106,7 @@ const renderForm = (data) => {
             <input id="sex" class="form-control" value="${data ? data.sex : ''}" placeholder="Sex">
         </div>
         <div class="mb-2">
-            <input id="password" class="form-control" value="${data ? data.password : ''}" placeholder="Password">
+            <input id="password" class="form-control" placeholder="Password">
         </div>
     `
 }
