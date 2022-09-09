@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const CategoryModel = require('../models/Category');
+const LogModel = require('../models/Log')
 
 class CategoriesController {
 
@@ -31,6 +32,11 @@ class CategoriesController {
         try {
             const data = await this._validateData(req.body);
             const category = await CategoryModel.create(data);
+
+            LogModel.create({
+                action: `Create the category ${data.description}`
+              });
+
             res.json(category);
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -51,6 +57,12 @@ class CategoriesController {
                     id: id
                 }
             });
+
+            LogModel.create({
+                action: `Update the category ${data.description}`
+              });
+
+
             res.json(await CategoryModel.findByPk(id));
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -63,6 +75,10 @@ class CategoriesController {
                 id: req.params.categoryId
             }
         });
+        LogModel.create({
+            action: `Delete the category ${req.params.categoryId}`
+          });
+
         res.json({});
     }
 

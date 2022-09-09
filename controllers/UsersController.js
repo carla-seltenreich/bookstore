@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const UserModel = require('../models/User');
 const crypto = require('crypto');
+const LogModel = require('../models/Log')
 
 crypt = (text) => {
   return crypto.createHash('sha256').update(text).digest('hex');
@@ -61,6 +62,10 @@ class UsersController {
         ...data,
         password: crypt(data.password)
       });
+
+      LogModel.create({
+        action: `Create a new user ${data.name}`
+      });
       res.json(user);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -81,6 +86,9 @@ class UsersController {
           id: id
         }
       });
+      LogModel.create({
+        action: `Update the user ${data.name}`
+      });
       res.json(await UserModel.findByPk(id));
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -92,6 +100,9 @@ class UsersController {
       where: {
         id: req.params.userId
       }
+    });
+    LogModel.create({
+      action: `Delete the user ${req.params.userId}`
     });
     res.json({});
   }

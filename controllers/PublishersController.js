@@ -43,6 +43,11 @@ class PublishersController {
       const data = await this._validateData(req.body);
       console.log(data);
       const publisher = await PublisherModel.create(data);
+      
+      LogModel.create({
+        action: `Create a new publisher ${data.title}`
+      });
+      
       res.json(publisher);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -74,6 +79,10 @@ class PublishersController {
           id: id
         }
       });
+      LogModel.create({
+        action: `Update the publisher ${data.title}`
+      });
+
       res.json(await PublisherModel.findByPk(id));
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -86,6 +95,10 @@ class PublishersController {
         id: req.params.publisherId
       }
     });
+    LogModel.create({
+      action: `Delete the publisher ${req.params.publisherId}`
+    });
+
     res.json({});
   }
 
