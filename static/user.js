@@ -27,12 +27,14 @@ const userCreate = () => {
     const age = document.getElementById("age").value;
     const sex = document.getElementById("sex").value;
     const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     axios.post(`${window._APP.endpoint}/users`, {
         name: name,
         age: age,
         sex: sex,
         email: email,
+        password: password,
     })
         .then((response) => {
             Swal.fire(`User ${response.data.name} created`);
@@ -55,12 +57,14 @@ const userEdit = () => {
     const age = document.getElementById("age").value;
     const sex = document.getElementById("sex").value;
     const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     axios.put(`${window._APP.endpoint}/users/` + id, {
         name: name,
         age: age,
         sex: sex,
         email: email,
+        password: password,
     })
         .then((response) => {
             Swal.fire(`User ${response.data.name} updated`);
@@ -100,6 +104,9 @@ const renderForm = (data) => {
         </div>
         <div class="mb-2">
             <input id="sex" class="form-control" value="${data ? data.sex : ''}" placeholder="Sex">
+        </div>
+        <div class="mb-2">
+            <input id="password" class="form-control" value="${data ? data.password : ''}" placeholder="Password">
         </div>
     `
 }

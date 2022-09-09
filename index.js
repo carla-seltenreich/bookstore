@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 app.use(routesApi);
 app.use(routesWeb);
 
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
