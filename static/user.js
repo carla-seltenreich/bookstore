@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:3007";
+const ENDPOINT = "http://localhost:3000";
 
 const loadTable = () => {
     axios.get(`${ENDPOINT}/users`)
@@ -13,7 +13,7 @@ const loadTable = () => {
                     trHTML += '<td>' + element.age + '</td>';
                     trHTML += '<td>' + element.sex + '</td>';
                     trHTML += '<td>' + element.email + '</td>';
-                    trHTML += '<td><button type="button" class="btn btn-outline-secondary" onclick="showUserEditBox(' + element.id + ')">Edit</button>';
+                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showUserEditBox(' + element.id + ')">Edit</button>';
                     trHTML += '<button type="button" class="btn btn-outline-danger" onclick="userDelete(' + element.id + ')">Del</button></td>';
                     trHTML += "</tr>";
                 });
@@ -88,15 +88,28 @@ const userDelete = async (id) => {
         });
 };
 
+const renderForm = (data) => {
+    return `
+        <input id="id" type="hidden">
+        <div class="mb-2">
+            <input id="name" class="form-control" value="${data ? data.name : ''}" placeholder="Name">
+        </div>
+        <div class="mb-2">
+            <input id="email" class="form-control" value="${data ? data.email : ''}" placeholder="Email">
+        </div>
+        <div class="mb-2">
+            <input id="age" class="form-control" value="${data ? data.age : ''}" placeholder="Age">
+        </div>
+        <div class="mb-2">
+            <input id="sex" class="form-control" value="${data ? data.sex : ''}" placeholder="Sex">
+        </div>
+    `
+}
+
 const showUserCreateBox = () => {
     Swal.fire({
         title: 'Create user',
-        html:
-            '<input id="id" type="hidden">' +
-            '<input id="name" class="swal2-input" placeholder="Name">' +
-            '<input id="age" class="swal2-input" placeholder="Age">' +
-            '<input id="sex" class="swal2-input" placeholder="Sex">' +
-            '<input id="email" class="swal2-input" placeholder="Email">',
+        html: renderForm(),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
@@ -110,12 +123,7 @@ const showUserEditBox = async (id) => {
     const data = user.data;
     Swal.fire({
         title: 'Edit User',
-        html:
-            '<input id="id" type="hidden" value=' + data.id + '>' +
-            '<input id="name" class="swal2-input" placeholder="Name" value="' + data.name + '">' +
-            '<input id="age" class="swal2-input" placeholder="Age" value="' + data.age + '">' +
-            '<input id="sex" class="swal2-input" placeholder="Sex" value="' + data.sex + '">' +
-            '<input id="email" class="swal2-input" placeholder="Email" value="' + data.email + '">',
+        html: renderForm(data),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {

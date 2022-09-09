@@ -1,16 +1,20 @@
 require('dotenv').config();
 
+const PORT = process.env.PORT;
+
 require('./db');
 
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 const routesApi = require('./routes/api');
 const routesWeb = require('./routes/web');
-
-const PORT = process.env.PORT || 3007;
+const bodyParser = require('body-parser');
 
 const app = express();
 
+app.use(session({secret: 'engfmslçelfwç'}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 app.use(express.json());

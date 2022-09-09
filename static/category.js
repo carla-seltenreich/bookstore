@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:3007";
+const ENDPOINT = "http://localhost:3000";
 
 const loadTable = () => {
     axios.get(`${ENDPOINT}/categories`)
@@ -10,7 +10,7 @@ const loadTable = () => {
                     trHTML += '<tr>';
                     trHTML += '<td>' + element.id + '</td>';
                     trHTML += '<td>' + element.description + '</td>';
-                    trHTML += '<td><button type="button" class="btn btn-outline-secondary" onclick="showCategoryEditBox(' + element.id + ')">Edit</button>';
+                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showCategoryEditBox(' + element.id + ')">Edit</button>';
                     trHTML += '<button type="button" class="btn btn-outline-danger" onclick="categoryDelete(' + element.id + ')">Del</button></td>';
                     trHTML += "</tr>";
                 });
@@ -74,12 +74,17 @@ const categoryDelete = async (id) => {
         });
 };
 
+const renderForm = (data) => {
+    return `
+        <input id="id" type="hidden" value="${data ? data.id : ''}">
+        <input id="description" class="form-control" placeholder="Description" value="${data ? data.description : ''}">
+    `
+}
+
 const showCategoryCreateBox = () => {
     Swal.fire({
-        title: 'Create category',
-        html:
-            '<input id="id" type="hidden">' +
-            '<input id="description" class="swal2-input" placeholder="Description">',
+        title: 'New category',
+        html: renderForm(),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
@@ -91,16 +96,14 @@ const showCategoryCreateBox = () => {
 const showCategoryEditBox = async (id) => {
     const category = await getCategory(id);
     const data = category.data;
+
     Swal.fire({
         title: 'Edit Category',
-        html:
-            '<input id="id" type="hidden" value=' + data.id + '>' +
-            '<input id="description" class="swal2-input" placeholder="Description" value="' + data.description + '">',
+        html: renderForm(data),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
             categoryEdit();
         }
     });
-
 }

@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:3007";
+const ENDPOINT = "http://localhost:3000";
 
 const loadTable = () => {
     axios.get(`${ENDPOINT}/publishers`)
@@ -12,8 +12,8 @@ const loadTable = () => {
                     trHTML += '<td>' + element.name + '</td>';
                     trHTML += '<td>' + element.City.State.name + '</td>';
                     trHTML += '<td>' + element.City.name + '</td>';
-                    trHTML += '<td><button type="button" class="btn btn-outline-secondary" onclick="showPublisherEditBox(' + element.id + ')">Edit</button>';
-                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="publisherDelete(' + element.id + ')">Del</button></td>';
+                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showPublisherEditBox(' + element.id + ')">Edit</button>';
+                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="publisherDelete(' + element.id + ')">Delete</button></td>';
                     trHTML += "</tr>";
                 });
                 document.getElementById("mytable").innerHTML = trHTML;
@@ -80,29 +80,37 @@ const publisherDelete = async (id) => {
         });
 };
 
+const renderForm = (data) => {
+    return `
+        <input id="id" type="hidden" value="${data ? data.id : ''}">
+        <div class="mb-3">
+            <input id="name" class="form-control" placeholder="Name" value="${data ? data.name : ''}">
+        </div>
+        <div class="mb-3">
+            <select class="form-select" id="state" name="state" onchange="getCitiesByState()">
+                <option value="">Select a state</option>
+            </select>
+        </div>
+        <select class="form-select" id="city" name="city">
+            <option value="">Select a city</option>
+        </select>
+    `
+}
+
 const showPublisherCreateBox = () => {
     Swal.fire({
-        title: 'Create publisher',
-        html: `
-            <input id="id" type="hidden">
-            <input id="name" class="swal2-input" placeholder="Name">
-            <select class="swal2-input" id="state" name="state" onchange="getCitiesByState()">
-                <option value="">select state</option>
-            </select>
-            <select class="swal2-input" id="city" name="city">
-                <option value="">select city</option>
-            </select>
-        `,
+        title: 'New publisher',
+        html: renderForm(),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
             publisherCreate();
         },
-        didOpen: async (toast) => {
+        didOpen: async () => {
             const state = document.getElementById('state');
             const allStates = await getAllStates();
 
-            allStates.forEach((item, index) => {
+            allStates.forEach((item) => {
                 var opt = document.createElement('option');
                 opt.value = item.id;
                 opt.innerHTML = item.name;
@@ -119,26 +127,17 @@ const showPublisherEditBox = async (id) => {
 
     Swal.fire({
         title: 'Edit publisher',
-        html: `
-            <input id="id" type="hidden" value="${data.id}">
-            <input id="name" class="swal2-input" placeholder="Name" value="${data.name}">
-            <select class="swal2-input" id="state" name="state" onchange="getCitiesByState()">
-                <option value="">select state</option>
-            </select>
-            <select class="swal2-input" id="city" name="city">
-                <option value="">select city</option>
-            </select>
-        `,
+        html: renderForm(data),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
             publisherEdit();
         },
-        didOpen: async (toast) => {
+        didOpen: async () => {
             const state = document.getElementById('state');
             const allStates = await getAllStates();
 
-            allStates.forEach((item, index) => {
+            allStates.forEach((item) => {
                 var opt = document.createElement('option');
                 opt.value = item.id;
                 opt.innerHTML = item.name;

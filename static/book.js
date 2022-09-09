@@ -1,4 +1,4 @@
-const ENDPOINT = "http://localhost:3007";
+const ENDPOINT = "http://localhost:3000";
 
 const loadTable = () => {
     axios.get(`${ENDPOINT}/books`)
@@ -15,7 +15,7 @@ const loadTable = () => {
                     trHTML += '<td>' + element.pages + '</td>';
                     trHTML += '<td>' + element.Category.description + '</td>';
                     trHTML += '<td>' + element.Publisher.name + '</td>';
-                    trHTML += '<td><button type="button" class="btn btn-outline-secondary" onclick="showBookEditBox(' + element.id + ')">Edit</button>';
+                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showBookEditBox(' + element.id + ')">Edit</button>';
                     trHTML += '<button type="button" class="btn btn-outline-danger" onclick="bookDelete(' + element.id + ')">Del</button></td>';
                     trHTML += "</tr>";
                 });
@@ -98,27 +98,44 @@ const bookDelete = async (id) => {
         });
 };
 
+const renderForm = (data) => {
+    return `            
+        <input id="id" type="hidden" value="${data ? data.id : ''}">
+        <div class="mb-2">
+            <input id="title" class="form-control" placeholder="Title" value="${data ? data.title : ''}">
+        </div>
+        <div class="mb-2">
+            <input id="author" class="form-control" placeholder="Author" value="${data ? data.author : ''}">
+        </div>
+        <div class="mb-2">
+            <input id="publication_year" class="form-control" placeholder="Publication year" value="${data ? data.publication_year : ''}">
+        </div>
+        <div class="mb-2">
+            <input type="number" id="pages" class="form-control" placeholder="Pages" value="${data ? data.pages : ''}">
+        </div>
+        <div class="mb-2">
+            <select class="form-select" id="publisher" name="publisher">
+                <option value="">Select a publisher</option>
+            </select>
+        </div>
+        <div class="mb-2">
+            <select class="form-select" id="category" description="category">
+                <option value="">Select a category</option>
+            </select>
+        </div>
+    `
+}
+
 const showBookCreateBox = () => {
     Swal.fire({
         title: 'Create book',
-        html: `            
-            <input id="id" type="hidden">
-            <input id="title" class="swal2-input" placeholder="Title">
-            <input id="author" class="swal2-input" placeholder="Author">
-            <input id="publication_year" class="swal2-input" placeholder="Publication year">
-            <input id="pages" class="swal2-input" placeholder="Pages">
-            <select class="swal2-input" id="publisher" name="publisher">
-            <option value="">select publisher</option>
-            </select>
-            <select class="swal2-input" id="category" description="category">
-            <option value="">select category</option>
-            </select>`,
+        html: renderForm(),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
             bookCreate();
         },
-        didOpen: async (toast) => {
+        didOpen: async () => {
             const category = document.getElementById('category');
             const publisher = document.getElementById('publisher');
 
@@ -149,18 +166,7 @@ const showBookEditBox = async (id) => {
     const data = book.data;
     Swal.fire({
         title: 'Edit Book',
-        html: `            
-        <input id="id" type="hidden" value="${data.id}">
-        <input id="title" class="swal2-input" placeholder="Title" value="${data.title}">
-        <input id="author" class="swal2-input" placeholder="Author" value="${data.author}">
-        <input id="publication_year" class="swal2-input" placeholder="Publication year" value="${data.publication_year}">
-        <input id="pages" class="swal2-input" placeholder="Pages" value="${data.pages}">
-        <select class="swal2-input" id="publisher" name="publisher">
-        <option value="">select publisher</option>
-        </select>
-        <select class="swal2-input" id="category" description="category">
-        <option value="">select category</option>
-        </select>`,
+        html: renderForm(data),
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
