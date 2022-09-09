@@ -13,7 +13,10 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(session({secret: 'engfmslçelfwç'}));
+app.use(session({
+  secret: 'engfmslçelfwç',
+  expires: new Date(Date.now() + 3600)
+}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 

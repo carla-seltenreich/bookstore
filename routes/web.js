@@ -1,4 +1,10 @@
 const router = require('express').Router();
+const UserModel = require('../models/User');
+const crypto = require('crypto');
+
+crypt = (text) => {
+    return crypto.createHash('sha256').update(text).digest('hex');
+}
 
 router.get('/web/home', function (req, res) {
     res.render('pages/home');
@@ -23,19 +29,23 @@ router.get('/web/login', function (req, res) {
     res.render('pages/login');
 });
 
-router.post('/web/login', (req, res) => {
-    var email = 'carla@c';
-    var password = 123;
-
-    if (req.body.email == email && req.body.password == password) {
-        req.session.auth = {
-            email,
-            isLoggedIn: true,
+router.post('/web/login', async (req, res) => {
+    let user = await UserModel.findAll({
+        where: {
+            email: req.body.email,
+            password: crypt(req.body.password)
         }
-        res.redirect('/web/home');
-    } else {
-        res.redirect('/web/login');
+    })
+
+if(user.length > 0) {
+    req.session.auth = {
+        email: req.body.email,
+        isLoggedIn: true,
     }
+    res.redirect('/web/home');
+} else {
+    res.redirect('/web/login');
+}
 })
 
 router.get('/web/logout', (req, res) => {

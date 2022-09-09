@@ -69,8 +69,8 @@ const bookEdit = () => {
         author: author,
         publication_year: publication_year,
         pages: pages,
-        Categoryid: category,
-        Publisherid: publisher
+        CategoryId: category,
+        PublisherId: publisher
     })
         .then((response) => {
             Swal.fire(`Book ${response.data.title} updated`);
@@ -106,7 +106,7 @@ const renderForm = (data) => {
             <input id="author" class="form-control" placeholder="Author" value="${data ? data.author : ''}">
         </div>
         <div class="mb-2">
-            <input id="publication_year" class="form-control" placeholder="Publication year" value="${data ? data.publication_year : ''}">
+            <input type="number" id="publication_year" class="form-control" placeholder="Publication year" value="${data ? data.publication_year : ''}">
         </div>
         <div class="mb-2">
             <input type="number" id="pages" class="form-control" placeholder="Pages" value="${data ? data.pages : ''}">

@@ -54,7 +54,6 @@ class UsersController {
     res.json(users);
   }
 
-
   create = async (req, res, next) => {
     try {
       const data = await this._validateData(req.body);
@@ -101,7 +100,7 @@ class UsersController {
     const attributes = ['name', 'age', 'sex', 'email', 'password'];
     const user = {};
     for (const attribute of attributes) {
-      if (!data[attribute]) {
+      if (!id && !data[attribute]) {
         throw new Error(`The attribute "${attribute}" is required.`);
       }
 
@@ -109,7 +108,7 @@ class UsersController {
     }
 
     if (await this._checkIfEmailExists(user.email, id)) {
-      throw new Error(`The user with mail address "${user.email}" already exists.`);
+      throw new Error(`The user with email address "${user.email}" already exists.`);
     }
 
     return user;

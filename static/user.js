@@ -100,7 +100,7 @@ const renderForm = (data) => {
             <input id="email" class="form-control" value="${data ? data.email : ''}" placeholder="Email">
         </div>
         <div class="mb-2">
-            <input id="age" class="form-control" value="${data ? data.age : ''}" placeholder="Age">
+            <input type="number" id="age" class="form-control" value="${data ? data.age : ''}" placeholder="Age">
         </div>
         <div class="mb-2">
             <input id="sex" class="form-control" value="${data ? data.sex : ''}" placeholder="Sex">
