@@ -11,8 +11,10 @@ const loadTable = () => {
                     trHTML += '<td>' + element.author + '</td>';
                     trHTML += '<td>' + element.publication_year + '</td>';
                     trHTML += '<td>' + element.pages + '</td>';
+                    trHTML += '<td>' + element.price + '</td>';
                     trHTML += '<td>' + element.Category.description + '</td>';
                     trHTML += '<td>' + element.Publisher.name + '</td>';
+                    trHTML += '<td>' + element.Format.description + '</td>';
                     trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showBookEditBox(' + element.id + ')">Edit</button>';
                     trHTML += '<button type="button" class="btn btn-outline-danger" onclick="bookDelete(' + element.id + ')">Del</button></td>';
                     trHTML += "</tr>";
@@ -31,6 +33,8 @@ const bookCreate = () => {
     const pages = document.getElementById("pages").value;
     const category = document.getElementById("category").value;
     const publisher = document.getElementById("publisher").value;
+    const price = document.getElementById("price").value;
+    const format = document.getElementById("format").value;
 
     axios.post(`${window._APP.endpoint}/books`, {
         title: title,
@@ -38,7 +42,9 @@ const bookCreate = () => {
         publication_year: publication_year,
         pages: pages,
         CategoryId: category,
-        PublisherId: publisher
+        PublisherId: publisher,
+        price: price,
+        FormatId: format
     })
         .then((response) => {
             Swal.fire(`Book ${response.data.title} created`);
@@ -63,6 +69,8 @@ const bookEdit = () => {
     const pages = document.getElementById("pages").value;
     const category = document.getElementById("category").value;
     const publisher = document.getElementById("publisher").value;
+    const price = document.getElementById("price").value;
+    const format = document.getElementById("format").value;
 
     axios.put(`${window._APP.endpoint}/books/` + id, {
         title: title,
@@ -70,7 +78,9 @@ const bookEdit = () => {
         publication_year: publication_year,
         pages: pages,
         CategoryId: category,
-        PublisherId: publisher
+        PublisherId: publisher,
+        price: price,
+        FormatId: format
     })
         .then((response) => {
             Swal.fire(`Book ${response.data.title} updated`);
@@ -106,22 +116,29 @@ const renderForm = (data) => {
             <input id="author" class="form-control" placeholder="Author" value="${data ? data.author : ''}">
         </div>
         <div class="mb-2">
-            <input type="number" id="publication_year" class="form-control" placeholder="Publication year" value="${data ? data.publication_year : ''}">
+            <input type="number" min="1900" max="2099" id="publication_year" class="form-control" placeholder="Publication year" value="${data ? data.publication_year : ''}">
         </div>
         <div class="mb-2">
             <input type="number" id="pages" class="form-control" placeholder="Pages" value="${data ? data.pages : ''}">
         </div>
         <div class="mb-2">
             <select class="form-select" id="publisher" name="publisher">
-                <option value="">Select a publisher</option>
+            <option value="">Select a publisher</option>
             </select>
         </div>
         <div class="mb-2">
             <select class="form-select" id="category" description="category">
-                <option value="">Select a category</option>
+            <option value="">Select a category</option>
             </select>
         </div>
-    `
+        <div class="mb-2">
+            <select class="form-select" id="format" description="format">
+            <option value="">Select the format</option>
+            </select>
+        </div>
+        <div class="mb-2">
+            <input type="number" id="price" min="0.01" max="1000" step="0,01" class="form-control" placeholder="R$0,00" value="${data ? data.price : ''}">
+        </div>`
 }
 
 const showBookCreateBox = () => {
@@ -136,12 +153,15 @@ const showBookCreateBox = () => {
         didOpen: async () => {
             const category = document.getElementById('category');
             const publisher = document.getElementById('publisher');
-
+            const format = document.getElementById('format');
+            
             const allCategories = await getAllCategories();
             const allPublishers = await getAllPublishers();
-
+            const allFormats = await getAllFormats();
+            
             renderSelectOptions(category, allCategories, 'description');
-            renderSelectOptions(publisher, allPublishers);
+            renderSelectOptions(publisher, allPublishers, 'name');
+            renderSelectOptions(format, allFormats, 'description');
         }
     });
 }
@@ -160,27 +180,19 @@ const showBookEditBox = async (id) => {
         didOpen: async (toast) => {
             const category = document.getElementById('category');
             const publisher = document.getElementById('publisher');
-
+            const format = document.getElementById('format');
+            
             const allCategories = await getAllCategories();
             const allPublishers = await getAllPublishers();
+            const allFormats = await getAllFormats();
 
-            allCategories.forEach((item, index) => {
-                var opt = document.createElement('option');
-                opt.value = item.id;
-                opt.innerHTML = item.description;
+            renderSelectOptions(category, allCategories, 'description');
+            renderSelectOptions(publisher, allPublishers, 'name');
+            renderSelectOptions(format, allFormats, 'description');
 
-                category.appendChild(opt);
-            })
-
-            allPublishers.forEach((item, index) => {
-                var opt = document.createElement('option');
-                opt.value = item.id;
-                opt.innerHTML = item.name;
-
-                publisher.appendChild(opt);
-            });
             category.value = data.CategoryId;
             publisher.value = data.PublisherId;
+            format.value = data.FormatId;
         }
     });
 }
@@ -194,6 +206,12 @@ const getAllCategories = async () => {
 
 const getAllPublishers = async () => {
     const res = await axios.get(`${window._APP.endpoint}/publishers`);
+
+    return res.data;
+}
+
+const getAllFormats = async () => {
+    const res = await axios.get(`${window._APP.endpoint}/formats`);
 
     return res.data;
 }

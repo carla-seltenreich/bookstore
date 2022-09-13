@@ -2,6 +2,8 @@ const { Op } = require('sequelize');
 const CityModel = require('../models/City');
 const StateModel = require('../models/State');
 const PublisherModel = require('../models/Publisher');
+const LogModel = require('../models/Log');
+
 
 class PublishersController {
 

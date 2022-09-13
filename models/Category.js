@@ -1,6 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
 const db = require('../db');
-const Book = require('./Book');
 
 class Category extends Model { };
 
@@ -21,7 +20,6 @@ Category.init({
   modelName: 'Category'
 });
 
-Category.hasMany(Book);
-Book.belongsTo(Category);
+
 
 module.exports = Category;

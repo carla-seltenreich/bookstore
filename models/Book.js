@@ -1,7 +1,8 @@
 const { DataTypes, Model } = require('sequelize');
 const db = require('../db');
-const Category = require('./Category');
 const Publisher = require('./Publisher');
+const Format = require('./Format');
+const Category = require('./Category');
 
 class Book extends Model { };
 
@@ -27,6 +28,10 @@ Book.init({
   pages: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  price: {
+    type: DataTypes.DECIMAL(10,2),
+    allowNull: false
   }
 }, {
   sequelize: db,
@@ -36,5 +41,12 @@ Book.init({
 
 Publisher.hasMany(Book);
 Book.belongsTo(Publisher);
+
+
+Format.hasMany(Book);
+Book.belongsTo(Format);
+
+Category.hasMany(Book);
+Book.belongsTo(Category);
 
 module.exports = Book;

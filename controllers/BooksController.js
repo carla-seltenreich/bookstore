@@ -2,9 +2,7 @@ const { Op } = require('sequelize');
 const BookModel = require('../models/Book');
 const PublisherModel = require('../models/Publisher');
 const CategoryModel = require('../models/Category');
-const LogModel = require('../models/Log')
-
-
+const FormatModel = require('../models/Format');
 class BooksController {
 
     index = async (req, res, next) => {
@@ -38,6 +36,11 @@ class BooksController {
                 [Op.like]: `%${params.pages}%`
             };
         }
+        if (params.price) {
+            where.price = {
+                [Op.like]: `%${params.price}%`
+            };
+        }
         const books = await BookModel.findAll({
             where: where,
             limit: limit,
@@ -53,6 +56,11 @@ class BooksController {
                     model: PublisherModel,
                     require: false,
                     attributes: ['name']
+                },
+                {
+                    model: FormatModel,
+                    require: false,
+                    attributes: ['description']
                 }
             ]
         });
@@ -110,7 +118,7 @@ class BooksController {
     }
 
     _validateData = async (data) => {
-        const attributes = ['title', 'author', 'publication_year', 'pages', 'CategoryId', 'PublisherId'];
+        const attributes = ['title', 'author', 'publication_year', 'pages', 'price', 'CategoryId', 'PublisherId', 'FormatId'];
         const book = {};
         for (const attribute of attributes) {
             if (!data[attribute]) {
@@ -118,29 +126,9 @@ class BooksController {
             }
             book[attribute] = data[attribute];
         }
-        // if (await this._checkIIdExists(book.id)) {
-        //     throw new Error(`The book with id "${book.id}" already exists.`);
-        // }
 
         return book;
     }
-
-    // _checkIfIdExists = async (title, ) => {
-    //     const where = {
-    //         title : title
-    //     };
-
-    //     // if (id) {
-    //     //     where.id = { [Op.ne]: id }; // WHERE id != id
-    //     // }
-
-    //     const count = await BookModel.count({
-    //         where: where
-    //     });
-
-    //     return count > 0;
-    
-
 }
 
 module.exports = new BooksController();

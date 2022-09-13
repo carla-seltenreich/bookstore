@@ -6,6 +6,9 @@ crypt = (text) => {
     return crypto.createHash('sha256').update(text).digest('hex');
 }
 
+router.get('/web/books', function (req, res) {
+    res.render('pages/books');
+});
 router.get('/web/home', function (req, res) {
     res.render('pages/home');
 });
@@ -17,13 +20,14 @@ router.get('/web/categories', function (req, res) {
     res.render('pages/categories');
 });
 
+router.get('/web/formats', function (req, res) {
+    res.render('pages/formats');
+});
+
 router.get('/web/publishers', function (req, res) {
     res.render('pages/publishers');
 });
 
-router.get('/web/books', function (req, res) {
-    res.render('pages/books');
-});
 
 router.get('/web/login', function (req, res) {
     res.render('pages/login');
