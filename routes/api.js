@@ -7,6 +7,7 @@ const formats = require('./formats');
 const books = require('./books');
 const cities = require('./cities');
 const states = require('./states');
+const address = require('./address');
 
 router.use(cors());
 
@@ -17,5 +18,6 @@ router.use(formats);
 router.use(books);
 router.use(cities);
 router.use(states);
+router.use(address);
 
 module.exports = router;

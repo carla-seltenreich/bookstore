@@ -1,3 +1,5 @@
+let isAjaxing = false;
+
 const loadTable = () => {
     axios.get(`${window._APP.endpoint}/publishers`)
         .then((response) => {
@@ -85,11 +87,14 @@ const renderForm = (data) => {
             <input id="name" class="form-control" placeholder="Name" value="${data ? data.name : ''}">
         </div>
         <div class="mb-3">
-            <select class="form-select" id="state" name="state" onchange="getCitiesByState()">
+            <input type="number" min="8" max="8" id="zipcode" class="form-control" placeholder="Zipcode" oninput="findZipcode()">
+        </div>
+        <div class="mb-3">
+            <select class="form-select" id="state" name="state" onchange="getCitiesByState()" readonly>
                 <option value="">Select a state</option>
             </select>
         </div>
-        <select class="form-select" id="city" name="city">
+        <select class="form-select" id="city" name="city" readonly>
             <option value="">Select a city</option>
         </select>
     `
@@ -159,3 +164,25 @@ const getCitiesByState = async (defaultCity) => {
         city.value = defaultCity;
     }
 };
+
+const findZipcode = async () => {
+    const zipcode = document.getElementById('zipcode').value;
+    const state = document.getElementById('state');
+
+    if (zipcode.length < 8 || isAjaxing) {
+        return;
+    }
+
+    try {
+        isAjaxing = true;
+        const { data } = await axios.get(`${window._APP.endpoint}/address/${zipcode}`);
+    
+        state.value = data.StateId;
+    
+        getCitiesByState(data.CityId);        
+    } catch (error) {
+        alert(error.message ?? 'Generic error')
+    } finally {
+        isAjaxing = false
+    }
+}
