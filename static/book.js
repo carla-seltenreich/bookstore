@@ -2,29 +2,37 @@ const loadTable = () => {
     axios.get(`${window._APP.endpoint}/books`)
         .then((response) => {
             if (response.status === 200) {
-                const data = response.data;
-                var trHTML = '';
-                data.forEach(element => {
-                    trHTML += '<tr>';
-                    trHTML += '<td>' + element.id + '</td>';
-                    trHTML += '<td>' + element.title + '</td>';
-                    trHTML += '<td>' + element.author + '</td>';
-                    trHTML += '<td>' + element.publication_year + '</td>';
-                    trHTML += '<td>' + element.pages + '</td>';
-                    trHTML += '<td>' + element.price + '</td>';
-                    trHTML += '<td>' + element.Category.description + '</td>';
-                    trHTML += '<td>' + element.Publisher.name + '</td>';
-                    trHTML += '<td>' + element.Format.description + '</td>';
-                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showBookEditBox(' + element.id + ')">Edit</button>';
-                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="bookDelete(' + element.id + ')">Del</button></td>';
-                    trHTML += "</tr>";
-                });
-                document.getElementById("mytable").innerHTML = trHTML;
+                createTable(response.data);
             }
         })
 };
 
 loadTable();
+
+const createTable = (data) => {
+    let trHTML = '';
+    const myTable = document.getElementById('mytable');
+
+    myTable.innerHTML = '';
+
+    data.forEach(element => {
+        trHTML += '<tr>';
+        trHTML += '<td>' + element.id + '</td>';
+        trHTML += '<td>' + element.title + '</td>';
+        trHTML += '<td>' + element.author + '</td>';
+        trHTML += '<td>' + element.publication_year + '</td>';
+        trHTML += '<td>' + element.pages + '</td>';
+        trHTML += '<td>' + element.Category.description + '</td>';
+        trHTML += '<td>' + element.Publisher.name + '</td>';
+        trHTML += '<td>' + element.Format.description + '</td>';
+        trHTML += '<td>' + element.price + '</td>';
+        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showBookEditBox(' + element.id + ')">Edit</button>';
+        trHTML += '<button type="button" class="btn btn-outline-danger" onclick="bookDelete(' + element.id + ')">Del</button></td>';
+        trHTML += "</tr>";
+    });
+
+    myTable.innerHTML = trHTML;
+}
 
 const bookCreate = () => {
     const title = document.getElementById("title").value;
@@ -154,11 +162,11 @@ const showBookCreateBox = () => {
             const category = document.getElementById('category');
             const publisher = document.getElementById('publisher');
             const format = document.getElementById('format');
-            
+
             const allCategories = await getAllCategories();
             const allPublishers = await getAllPublishers();
             const allFormats = await getAllFormats();
-            
+
             renderSelectOptions(category, allCategories, 'description');
             renderSelectOptions(publisher, allPublishers, 'name');
             renderSelectOptions(format, allFormats, 'description');
@@ -181,7 +189,7 @@ const showBookEditBox = async (id) => {
             const category = document.getElementById('category');
             const publisher = document.getElementById('publisher');
             const format = document.getElementById('format');
-            
+
             const allCategories = await getAllCategories();
             const allPublishers = await getAllPublishers();
             const allFormats = await getAllFormats();
@@ -196,7 +204,6 @@ const showBookEditBox = async (id) => {
         }
     });
 }
-
 
 const getAllCategories = async () => {
     const res = await axios.get(`${window._APP.endpoint}/categories`);
@@ -214,4 +221,17 @@ const getAllFormats = async () => {
     const res = await axios.get(`${window._APP.endpoint}/formats`);
 
     return res.data;
+}
+
+const onSearch = async (e) => {
+    e.preventDefault();
+
+    const search = document.getElementById('search').value;
+
+    const { data } = await axios.get(`${window._APP.endpoint}/books`, {
+        params: {
+            title: search
+        }
+    });
+    createTable(data);
 }

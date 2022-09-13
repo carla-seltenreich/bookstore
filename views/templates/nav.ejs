@@ -14,11 +14,14 @@
                 <li class="nav-item"><a class="nav-link" href="/web/categories">Categories</a></li>
                 <li class="nav-item"><a class="nav-link" href="/web/formats">Formats</a></li>
             </ul>
-
-            
-            <span class="navbar-text">
-                <a href="/web/logout">logout</a>
-            </span>
+            <div class="d-flex my-2 my-lg-0">
+                <form onsubmit="return onSearch(event)" class="form-inline d-flex me-5">
+                    <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-success ms-2" type="submit">Search</button>
+                </form>
+    
+                <a href="/web/logout" class="btn btn-light">logout</a>
+            </div>
         </div>
     </div>
 </nav>

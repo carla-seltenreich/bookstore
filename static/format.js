@@ -2,22 +2,28 @@ const loadTable = () => {
     axios.get(`${window._APP.endpoint}/formats`)
         .then((response) => {
             if (response.status === 200) {
-                const data = response.data;
-                var trHTML = '';
-                data.forEach(element => {
-                    trHTML += '<tr>';
-                    trHTML += '<td>' + element.id + '</td>';
-                    trHTML += '<td>' + element.description + '</td>';
-                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showFormatEditBox(' + element.id + ')">Edit</button>';
-                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="formatDelete(' + element.id + ')">Del</button></td>';
-                    trHTML += "</tr>";
-                });
-                document.getElementById("mytable").innerHTML = trHTML;
+                createTable(response.data);
             }
         })
 };
 
 loadTable();
+const createTable = (data) => {
+    let trHTML = '';
+    const myTable = document.getElementById('mytable');
+
+    myTable.innerHTML = '';
+
+    data.forEach(element => {
+        trHTML += '<tr>';
+        trHTML += '<td>' + element.id + '</td>';
+        trHTML += '<td>' + element.description + '</td>';
+        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showFormatEditBox(' + element.id + ')">Edit</button>';
+        trHTML += '<button type="button" class="btn btn-outline-danger" onclick="formatDelete(' + element.id + ')">Del</button></td>';
+        trHTML += "</tr>";
+    });
+    myTable.innerHTML = trHTML;
+}
 
 const formatCreate = () => {
     const description = document.getElementById("description").value;
@@ -104,4 +110,17 @@ const showFormatEditBox = async (id) => {
             formatEdit();
         }
     });
+}
+
+const onSearch = async (e) => {
+    e.preventDefault();
+
+    const search = document.getElementById('search').value;
+
+    const { data } = await axios.get(`${window._APP.endpoint}/formats`, {
+        params: {
+            description: search
+        }
+    });
+    createTable(data);
 }

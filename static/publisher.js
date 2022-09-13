@@ -4,24 +4,32 @@ const loadTable = () => {
     axios.get(`${window._APP.endpoint}/publishers`)
         .then((response) => {
             if (response.status === 200) {
-                const data = response.data;
-                var trHTML = '';
-                data.forEach(element => {
-                    trHTML += '<tr>';
-                    trHTML += '<td>' + element.id + '</td>';
-                    trHTML += '<td>' + element.name + '</td>';
-                    trHTML += '<td>' + element.City.State.name + '</td>';
-                    trHTML += '<td>' + element.City.name + '</td>';
-                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showPublisherEditBox(' + element.id + ')">Edit</button>';
-                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="publisherDelete(' + element.id + ')">Delete</button></td>';
-                    trHTML += "</tr>";
-                });
-                document.getElementById("mytable").innerHTML = trHTML;
+                createTable(response.data)
             }
         })
 };
 
 loadTable();
+
+const createTable = (data) => {
+    let trHTML = '';
+    const myTable = document.getElementById('mytable'); 
+    
+    myTable.innerHTML = '';
+
+    data.forEach(element => {
+        trHTML += '<tr>';
+        trHTML += '<td>' + element.id + '</td>';
+        trHTML += '<td>' + element.name + '</td>';
+        trHTML += '<td>' + element.City.State.name + '</td>';
+        trHTML += '<td>' + element.City.name + '</td>';
+        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showPublisherEditBox(' + element.id + ')">Edit</button>';
+        trHTML += '<button type="button" class="btn btn-outline-danger" onclick="publisherDelete(' + element.id + ')">Delete</button></td>';
+        trHTML += "</tr>";
+    });
+
+    myTable.innerHTML = trHTML;
+}
 
 const publisherCreate = () => {
     const name = document.getElementById("name").value;
@@ -176,13 +184,27 @@ const findZipcode = async () => {
     try {
         isAjaxing = true;
         const { data } = await axios.get(`${window._APP.endpoint}/address/${zipcode}`);
-    
+
         state.value = data.StateId;
-    
-        getCitiesByState(data.CityId);        
+
+        getCitiesByState(data.CityId);
     } catch (error) {
         alert(error.message ?? 'Generic error')
     } finally {
         isAjaxing = false
     }
+}
+
+const onSearch = async (e) => {
+    e.preventDefault();
+
+    const search = document.getElementById('search').value;
+
+    const { data } = await axios.get(`${window._APP.endpoint}/publishers`, {
+        params: {
+            name: search
+        }
+    });
+
+    createTable(data);
 }

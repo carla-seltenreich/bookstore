@@ -2,25 +2,34 @@ const loadTable = () => {
     axios.get(`${window._APP.endpoint}/users`)
         .then((response) => {
             if (response.status === 200) {
-                const data = response.data;
-                var trHTML = '';
-                data.forEach(element => {
-                    trHTML += '<tr>';
-                    trHTML += '<td>' + element.id + '</td>';
-                    trHTML += '<td>' + element.name + '</td>';
-                    trHTML += '<td>' + element.age + '</td>';
-                    trHTML += '<td>' + element.sex + '</td>';
-                    trHTML += '<td>' + element.email + '</td>';
-                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showUserEditBox(' + element.id + ')">Edit</button>';
-                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="userDelete(' + element.id + ')">Del</button></td>';
-                    trHTML += "</tr>";
-                });
-                document.getElementById("mytable").innerHTML = trHTML;
+                createTable(response.data)
             }
         })
 };
 
 loadTable();
+
+const createTable = (data) => {
+    let trHTML = '';
+    const myTable = document.getElementById('mytable');
+
+    myTable.innerHTML = '';
+
+    data.forEach(element => {
+        trHTML += '<tr>';
+        trHTML += '<td>' + element.id + '</td>';
+        trHTML += '<td>' + element.name + '</td>';
+        trHTML += '<td>' + element.age + '</td>';
+        trHTML += '<td>' + element.sex + '</td>';
+        trHTML += '<td>' + element.email + '</td>';
+        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showUserEditBox(' + element.id + ')">Edit</button>';
+        trHTML += '<button type="button" class="btn btn-outline-danger" onclick="userDelete(' + element.id + ')">Del</button></td>';
+        trHTML += "</tr>";
+    });
+    myTable.innerHTML = trHTML;
+
+
+}
 
 const userCreate = () => {
     const name = document.getElementById("name").value;
@@ -136,4 +145,18 @@ const showUserEditBox = async (id) => {
         }
     });
 
+}
+
+const onSearch = async (e) => {
+    e.preventDefault();
+
+    const search = document.getElementById('search').value;
+
+    const { data } = await axios.get(`${window._APP.endpoint}/users`, {
+        params: {
+            name: search
+        }
+    });
+
+    createTable(data);
 }

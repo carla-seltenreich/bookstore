@@ -64,6 +64,7 @@ class BooksController {
                 }
             ]
         });
+
         res.json(books);
     }
 

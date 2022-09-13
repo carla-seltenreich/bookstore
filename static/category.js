@@ -2,38 +2,46 @@ const loadTable = () => {
     axios.get(`${window._APP.endpoint}/categories`)
         .then((response) => {
             if (response.status === 200) {
-                const data = response.data;
-                var trHTML = '';
-                data.forEach(element => {
-                    trHTML += '<tr>';
-                    trHTML += '<td>' + element.id + '</td>';
-                    trHTML += '<td>' + element.description + '</td>';
-                    trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showCategoryEditBox(' + element.id + ')">Edit</button>';
-                    trHTML += '<button type="button" class="btn btn-outline-danger" onclick="categoryDelete(' + element.id + ')">Del</button></td>';
-                    trHTML += "</tr>";
-                });
-                document.getElementById("mytable").innerHTML = trHTML;
+                createTable(response.data);
             }
         })
 };
 
 loadTable();
 
-const categoryCreate = () => {
-    const description = document.getElementById("description").value;
+const createTable = (data) => {
+    let trHTML = '';
+    const myTable = document.getElementById('mytable');
 
-    axios.post(`${window._APP.endpoint}/categories`, {
-        description: description,
-    })
-        .then((response) => {
-            Swal.fire(`Category ${response.data.description} created`);
-            loadTable();
-        }, (error) => {
-            Swal.fire(`Error to create category: ${error.response.data.error} `)
-                .then(() => {
-                    showCategoryCreateBox();
-                })
-        });
+    myTable.innerHTML = '';
+
+    data.forEach(element => {
+        trHTML += '<tr>';
+        trHTML += '<td>' + element.id + '</td>';
+        trHTML += '<td>' + element.description + '</td>';
+        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showCategoryEditBox(' + element.id + ')">Edit</button>';
+        trHTML += '<button type="button" class="btn btn-outline-danger" onclick="categoryDelete(' + element.id + ')">Del</button></td>';
+        trHTML += "</tr>";
+    });
+
+    myTable.innerHTML = trHTML;
+}
+
+const categoryCreate = () => {
+const description = document.getElementById("description").value;
+
+axios.post(`${window._APP.endpoint}/categories`, {
+    description: description,
+})
+    .then((response) => {
+        Swal.fire(`Category ${response.data.description} created`);
+        loadTable();
+    }, (error) => {
+        Swal.fire(`Error to create category: ${error.response.data.error} `)
+            .then(() => {
+                showCategoryCreateBox();
+            })
+    });
 }
 
 const getCategory = (id) => {
@@ -104,4 +112,17 @@ const showCategoryEditBox = async (id) => {
             categoryEdit();
         }
     });
+}
+
+const onSearch = async (e) => {
+    e.preventDefault();
+
+    const search = document.getElementById('search').value;
+
+    const { data } = await axios.get(`${window._APP.endpoint}/categories`, {
+        params: {
+            description: search
+        }
+    });
+    createTable(data);
 }
