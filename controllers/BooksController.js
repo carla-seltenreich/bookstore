@@ -12,37 +12,37 @@ class BooksController {
         const offset = (page - 1) * limit;
         const sort = params.sort || 'id';
         const order = params.order || 'ASC';
-        const where = {};
+        let where = {};
+        const queryString = params.q;
 
-        if (params.title) {
+        console.log(queryString)
+
+        if (queryString) {
             where.title = {
-                [Op.iLike]: `%${params.title}%`
+                [Op.iLike]: `%${queryString}%`
             };
         }
 
-        if (params.author) {
-            where.author = {
-                [Op.iLike]: `%${params.author}%`
+        if (queryString) {
+            where['$Category.description$'] = {
+                [Op.iLike]: `%${queryString}%`
             };
         }
 
-        if (params.publication_year) {
-            where.publication_year = {
-                [Op.like]: `%${params.publication_year}%`
-            };
-        }
         if (params.pages) {
             where.pages = {
                 [Op.like]: `%${params.pages}%`
             };
         }
-        if (params.price) {
-            where.price = {
-                [Op.like]: `%${params.price}%`
-            };
+
+        if (Object.keys(where).length > 0) {
+            where = {
+                [Op.or]: where
+            }
         }
+
         const books = await BookModel.findAll({
-            where: where,
+            where,
             limit: limit,
             offset: offset,
             order: [[sort, order]],

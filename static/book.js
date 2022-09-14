@@ -227,11 +227,14 @@ const onSearch = async (e) => {
     e.preventDefault();
 
     const search = document.getElementById('search').value;
+    const params = {};
+
+    if (search) {
+        params.q = search
+    }
 
     const { data } = await axios.get(`${window._APP.endpoint}/books`, {
-        params: {
-            title: search
-        }
+        params
     });
     createTable(data);
 }
