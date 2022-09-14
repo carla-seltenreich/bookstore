@@ -1,10 +1,9 @@
-const loadTable = () => {
-    axios.get(`${window._APP.endpoint}/books`)
-        .then((response) => {
-            if (response.status === 200) {
-                createTable(response.data);
-            }
-        })
+const loadTable = async (params = {}) => {
+    const { data } = await axios.get(`${window._APP.endpoint}/books`, {
+        params
+    });
+    
+    createTable(data);
 };
 
 loadTable();
@@ -14,6 +13,10 @@ const createTable = (data) => {
     const myTable = document.getElementById('mytable');
 
     myTable.innerHTML = '';
+
+    if (data.length == 0) {
+        trHTML = '<tr><td class="text-center" colspan="10">No data found.</td></tr>';
+    }
 
     data.forEach(element => {
         trHTML += '<tr>';
@@ -237,4 +240,33 @@ const onSearch = async (e) => {
         params
     });
     createTable(data);
+}
+
+const sortBy = async (field, e) => {
+    e.preventDefault();
+
+    const table = document.querySelector('.table');
+    const el = e.target.querySelector('.table-sort');
+    const order = el.getAttribute('data-sort-order') == 'asc' ? 'desc' : 'asc';
+
+    table.querySelectorAll('[data-sort-order]').forEach(el => {
+        el.classList.add('d-none');
+    });
+
+    el.setAttribute('data-sort-order', order);
+
+    el.classList.remove('d-none');
+    
+    if (order === 'asc') {
+        el.classList.remove('fa-arrow-down');
+        el.classList.add('fa-arrow-up');
+    } else {
+        el.classList.remove('fa-arrow-up');
+        el.classList.add('fa-arrow-down');
+    }
+
+    await loadTable({
+        order,
+        sort: field
+    });
 }
