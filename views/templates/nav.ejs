@@ -1,26 +1,36 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Livraria</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-            aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/web/home">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/web/users">Users</a></li>
-                <li class="nav-item"><a class="nav-link" href="/web/books">Books</a></li>
-                <li class="nav-item"><a class="nav-link" href="/web/publishers">Publishers</a></li>
-                <li class="nav-item"><a class="nav-link" href="/web/categories">Categories</a></li>
-                <li class="nav-item"><a class="nav-link" href="/web/formats">Formats</a></li>
+<nav class="navbar navbar-expand-lg navbar-light mask-custom shadow-50 mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/web/home"><span style="color: #5e9693;">Livraria</span><span
+                style="color: black;">CRIE_TI</span></a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/web/users">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/web/books">Books</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/web/publishers">Publishers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/web/categories">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/web/formats">Formats</a>
+                </li>
             </ul>
-            <div class="d-flex my-2 my-lg-0">
-                <form onsubmit="return onSearch(event)" class="form-inline d-flex me-5">
-                    <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success ms-2" type="submit">Search</button>
+            <% if (page != '/web/home') { %>
+                <form onsubmit="return onSearch(event)" class="d-flex form-inline me-5">
+                    <input class="form-control" type="search" id="search" placeholder="Search">
+                    <span class="input-group-text border-0" id="search">
+                        <i class="fas fa-search"></i>
+                    </span>
                 </form>
-    
-                <a href="/web/logout" class="btn btn-light">logout</a>
+            <% } %>
+            <div class="d-flex my-2 my-lg-0">                
+                <a href="/web/logout" class="btn btn-rounded btn-dark">logout</a>
             </div>
         </div>
     </div>

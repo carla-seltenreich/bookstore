@@ -23,7 +23,7 @@ const createTable = (data) => {
         trHTML += '<td>' + element.name + '</td>';
         trHTML += '<td>' + element.City.State.name + '</td>';
         trHTML += '<td>' + element.City.name + '</td>';
-        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary me-2" onclick="showPublisherEditBox(' + element.id + ')">Edit</button>';
+        trHTML += '<td class="text-end"><button type="button" class="btn btn-outline-secondary" me-2" onclick="showPublisherEditBox(' + element.id + ')">Edit</button>';
         trHTML += '<button type="button" class="btn btn-outline-danger" onclick="publisherDelete(' + element.id + ')">Delete</button></td>';
         trHTML += "</tr>";
     });

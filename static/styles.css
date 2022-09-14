@@ -1,0 +1,9 @@
+.nav-item a:hover {
+    background-color: #3e6b48;
+}
+
+.btn-secondary {
+    color: white;
+    background-color: #3e6b48;
+}
+

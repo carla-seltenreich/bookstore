@@ -7,30 +7,43 @@ crypt = (text) => {
 }
 
 router.get('/web/books', function (req, res) {
-    res.render('pages/books');
+    res.render('pages/books', {
+        page: req.url
+    });
 });
 router.get('/web/home', function (req, res) {
-    res.render('pages/home');
+    res.render('pages/home', {
+        page: req.url
+    });
 });
 router.get('/web/users', function (req, res) {
-    res.render('pages/users');
+    res.render('pages/users', {
+        page: req.url
+    });
 });
 
 router.get('/web/categories', function (req, res) {
-    res.render('pages/categories');
+    res.render('pages/categories', {
+        page: req.url
+    });
 });
 
 router.get('/web/formats', function (req, res) {
-    res.render('pages/formats');
+    res.render('pages/formats', {
+        page: req.url
+    });
 });
 
 router.get('/web/publishers', function (req, res) {
-    res.render('pages/publishers');
+    res.render('pages/publishers', {
+        page: req.url
+    });
 });
 
-
 router.get('/web/login', function (req, res) {
-    res.render('pages/login');
+    res.render('pages/login', {
+        page: req.url
+    });
 });
 
 router.post('/web/login', async (req, res) => {
@@ -41,22 +54,29 @@ router.post('/web/login', async (req, res) => {
         }
     })
 
-if(user.length > 0) {
-    req.session.auth = {
-        email: req.body.email,
-        isLoggedIn: true,
+    if (user.length > 0) {
+        req.session.auth = {
+            email: req.body.email,
+            isLoggedIn: true,
+        }
+        res.redirect('/web/home');
+    } else {
+        res.redirect('/web/login');
     }
-    res.redirect('/web/home');
-} else {
-    res.redirect('/web/login');
-}
 })
 
 router.get('/web/logout', (req, res) => {
     req.session.auth = null;
 
     res.redirect('/web/login');
-})
+});
 
+router.get('/', (req, res) => {
+    if (req.session.auth && req.session.auth.isLoggedIn) {
+        res.redirect('/web/home');
+    }
+
+    res.redirect('/web/login');
+})
 
 module.exports = router;
