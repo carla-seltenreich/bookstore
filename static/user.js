@@ -9,6 +9,7 @@ const loadTable = () => {
 
 loadTable();
 
+//função criada pra poder utilizar os dados mais de uma vez(no momento utilizado no loadTable e no search)
 const createTable = (data) => {
     let trHTML = '';
     const myTable = document.getElementById('mytable');
@@ -98,7 +99,7 @@ const userDelete = async (id) => {
             loadTable();
         });
 };
-
+//funcão criada para não repetir codigo (nesse caso no create e no update)
 const renderForm = (data) => {
     return `
         <input id="id" type="hidden" value="${data ? data.id : ''}">

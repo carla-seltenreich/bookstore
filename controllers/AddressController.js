@@ -2,6 +2,9 @@ const axios = require('axios');
 const City = require('../models/City');
 const State = require('../models/State');
 
+//acessa o via cep e traz um json com as informações referentes ao cep consultado
+//se o atributo é igual ao que temos na tabela de cidades e estados ele considera o cep valido, 
+//caso contrario é considerado como not found
 class AddressController {
     index = async (req, res, next) => {
         try {

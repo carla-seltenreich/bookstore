@@ -21,13 +21,13 @@ class PublishersController {
         [Op.iLike]: `%${params.name}%`
       };
     }
-
+      //pega todos os publishers e inclue os atributos
     const publishers = await PublisherModel.findAll({
       where: where,
       limit: limit,
       offset: offset,
       order: [ [sort, order] ],
-      include: [{
+      include: [{ 
         model: CityModel,
         required: false,
         attributes: ['name'],

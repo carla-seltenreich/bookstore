@@ -24,6 +24,7 @@ const seed = async () => {
             });
         }
      }
+     //usado para criar o primeiro usuario e assim poder fazer o login
         User.create({name: 'carla', age: 27, sex: 'fem', email: 'carlacris@gmail.com', password: crypt('123') } )
 
 }

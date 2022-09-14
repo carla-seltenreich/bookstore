@@ -23,3 +23,8 @@ npm install
 ```
 npm run serve
 ```
+
+## Run app on server
+```
+pm2 start npm --name "livraria" -- run serve-prod
+```

@@ -4,20 +4,14 @@ const StateModel = require('../models/State');
 class StatesController {
 
   index = async (req, res, next) => {
-
-    const state = await StateModel.findAll({
-      // include: [{
-      //   model: CityModel,
-      //   required: false,
-      //   attributes: ['name']
-      // }]
-    });
-
+      //encontra todos os estados
+    const state = await StateModel.findAll();
+    
     res.json(state);
   }
 
   cities = async (req, res, next) => {
-
+    //percorre todos os estados e inclue as cidades referentes a ele
     const state = await StateModel.findByPk(req.params.stateId, {
       include: [{
         model: CityModel,

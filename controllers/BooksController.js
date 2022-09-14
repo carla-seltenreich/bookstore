@@ -40,7 +40,8 @@ class BooksController {
                 [Op.or]: where
             }
         }
-
+        // percorre todos os books e inclue os nomes de categoria, editora e formato, usados no momento de criar
+        
         const books = await BookModel.findAll({
             where,
             limit: limit,

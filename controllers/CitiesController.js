@@ -4,7 +4,7 @@ const StateModel = require('../models/State');
 class CitiesController {
 
   index = async (req, res, next) => {
-
+    //encontra todas as cidades
     const cities = await CityModel.findAll({
       include: [{
         model: StateModel,

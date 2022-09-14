@@ -16,7 +16,8 @@
   "description": "cadastro bibliote",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon index.js -e js"
+    "serve": "nodemon index.js -e js",
+    "serve-prod": "node index.js"
   },
   "author": "",
   "license": "ISC"
